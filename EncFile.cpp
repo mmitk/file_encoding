@@ -29,6 +29,8 @@ EncFile::EncFile(std::string filename, filetype f,std::string password, std::str
 	seed=std::bitset<8>(sum).to_string();
 	seed = seed + seed;
 	lin_feed = std::make_unique<LFSR>(seed,tap);
+	_imsize=_image.getSize();
+	_outimage.create(_imsize.x, _imsize.y, sf::Color::White);
 }  // end constructor
 
 
@@ -37,3 +39,16 @@ void EncFile::loadImage(){
 	if (!_image.loadFromFile(_filename))
 		throw std::runtime_error("could not load image from file");
 }//  end loadImage
+
+void EncFile::softEncrypt(){
+	sf::Color p;
+	for (unsigned int i = 0; i<_imsize.x; i++) {
+		for (unsigned int j = 0; j<_imsize.y; j++) {
+			p = _image.getPixel(i, j);
+			p.r = p.r^lin_feed->generate(32);
+			p.g = p.g^lin_feed->generate(32);
+			p.b = p.b^lin_feed->generate(32);
+			_outimage.setPixel(i, j, p);
+		}
+	}
+}

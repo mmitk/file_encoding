@@ -16,6 +16,8 @@ class EncFile{
 	std::string _outfile;
 	std::unique_ptr<LFSR> lin_feed;
 	sf::Image _image;
+	sf::Image _outimage;
+	sf::Vector2u _imsize;
 
 	void loadImage();
 
