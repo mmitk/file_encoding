@@ -1,7 +1,7 @@
 CC = g++
-CFLAGS = -std=c++11 -c -g -Og -Wall -Werror -pedantic
-OBJ = LFSR.o bit_flags.o main.o
-DEPS = LFSR/LFSR.hpp LFSR/bit_flags.hpp 
+CFLAGS = -std=c++14 -c -g -Og -Wall -Werror -pedantic
+OBJ = LFSR.o bit_flags.o main.o EncFile.o
+DEPS = LFSR/LFSR.hpp LFSR/bit_flags.hpp EncFile.hpp
 LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 EXE = softEncrypt 
 
