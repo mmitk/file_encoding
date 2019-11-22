@@ -35,10 +35,10 @@ EncFile::EncFile(std::string filename, filetype f,std::string password, std::str
 
 // load image from file
 void EncFile::loadImage(){
-	_imsize=_image.getSize();
-	_outimage.create(_imsize.x, _imsize.y, sf::Color::White);
 	if (!_image.loadFromFile(_filename))
 		throw std::runtime_error("could not load image from file");
+	_imsize=_image.getSize();
+	_outimage.create(_imsize.x, _imsize.y, sf::Color::White);
 }//  end loadImage
 
 void EncFile::softEncrypt(){
