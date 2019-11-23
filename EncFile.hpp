@@ -3,7 +3,10 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <memory>
-enum filetype{image, sound, text};
+#include<fstream>
+#include<iostream>
+#include<sstream>
+enum filetype{image, sound, text, none};
 class EncFile{
    public:
 	EncFile(std::string filename, filetype f, std::string password, std::string outfile);
@@ -19,8 +22,13 @@ class EncFile{
 	sf::Image _image;
 	sf::Image _outimage;
 	sf::Vector2u _imsize;
-
+	std::string _intext;
+	std::string _outtext;
+	void writeImage();
+	void writeText();
 	void loadImage();
+	void loadText();
 	void softEncryptImage();
+	void softEncryptText();
 
 };

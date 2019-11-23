@@ -17,7 +17,10 @@ EncFile::EncFile(std::string filename, filetype f,std::string password, std::str
 			}
 			break;
 		case sound: break;
-		case text: break;
+		case text: 
+			loadText();
+			break;
+		case none: throw std::runtime_error("invalid filetype");
 		default: break;
 	}  // end switch
 	// initialize LFSR with password
@@ -44,12 +47,15 @@ void EncFile::loadImage(){
 void EncFile::softEncrypt(){
 	// choose correct private function to use
 	// to encrypt file based on filetype
+	cout<<_f<<endl;
 	switch(_f){
 		case image:
 			softEncryptImage();
 			break;
-		case sound: break;
-		case text: break;
+		case sound: 
+			break;
+		case text: softEncryptText();
+			break;
 		default: break;
 	}  // end switch
 }
@@ -69,7 +75,60 @@ void EncFile::softEncryptImage(){
 	}
 }
 
+void EncFile::softEncryptText(){
+	cout<<"encrypting......"<<endl;
+	std::ostringstream fullstr;
+	for(const char &c: _intext){
+			//int newVal = c;
+			int newVal = c ^ lin_feed->generate(32);
+			char newc = (char)newVal;
+			fullstr<<newc;
+
+		}
+	cout<<"instring: "<<_intext<<endl;
+	cout<<"outtext: "<<_outtext<<endl;
+	_outtext=fullstr.str();
+}
+
 void EncFile::writeFile(){
+	// choose correct private function to use
+	// to write file based on filetype
+	switch(_f){
+		case image:
+			writeImage();
+			break;
+		case sound: break;
+		case text:writeText();
+			 break;
+		default: break;
+	}  // end switch
+}
+
+void EncFile::writeText(){
+	ofstream outfile;
+	outfile.open(_outfile);
+	outfile<<_outtext;
+	outfile.close();
+}
+
+void EncFile::writeImage(){
 	if (!_outimage.saveToFile(_outfile))
 		throw std::runtime_error("could not write encrypted image to file");
+}
+
+void EncFile::loadText(){
+	std::ostringstream fullstr;
+	string str;
+	ifstream infile;
+	infile.open (_filename);
+        while(true) 
+        {
+	        if(!getline(infile,str)) // Saves the line in str
+			break;
+		else
+			fullstr<<str<<endl;
+        }
+	//cout<<fullstr.str();
+	infile.close();
+	_intext= fullstr.str();
 }
